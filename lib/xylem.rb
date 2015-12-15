@@ -13,7 +13,7 @@ module Xylem
     end
 
     def leaves
-      where.not(id: pluck(:parent_id))
+      where(arel_table[:id].not_in(arel_table.project([arel_table[:parent_id]]).where(arel_table[:parent_id].not_eq(nil)).distinct))
     end
   end
 end

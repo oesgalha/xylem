@@ -42,14 +42,19 @@ class ClassMethodsTest < MiniTest::Test
     consultancy = Category.create!(parent_id: service.id)
     hosting = Category.create!(parent_id: service.id)
 
+    daily_training = Category.create!(parent_id: training.id)
+    weekly_training = Category.create!(parent_id: training.id)
+
     assert_includes Category.leaves, physical
     assert_includes Category.leaves, digital
-    assert_includes Category.leaves, training
     assert_includes Category.leaves, consultancy
     assert_includes Category.leaves, hosting
+    assert_includes Category.leaves, daily_training
+    assert_includes Category.leaves, weekly_training
 
     refute_includes Category.leaves, product
     refute_includes Category.leaves, service
+    refute_includes Category.leaves, training
   end
 
   def test_plain_model
