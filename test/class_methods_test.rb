@@ -11,7 +11,7 @@ class ClassMethodsTest < MiniTest::Test
     product = Category.create!
     service = Category.create!
 
-    assert_equal Category.root, product
+    assert_equal product, Category.root
   end
 
   def test_roots

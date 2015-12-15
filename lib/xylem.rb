@@ -1,6 +1,21 @@
+require 'pry'
+
 module Xylem
   def self.included(base)
     base.extend(ClassMethods)
+    base.include(InstanceMethods)
+  end
+
+  module InstanceMethods
+    def ancestors
+      table = self.class.arel_table
+      ancestors_cte = Arel::Table.new(:ancestors)
+      recursive_term = table.project([table[Arel.star]]).where(table[:id].eq(parent_id))
+      non_recursive_term = table.project([table[Arel.star]]).join(ancestors_cte).on(table[:id].eq(ancestors_cte[:parent_id]))
+      union = recursive_term.union(:all, non_recursive_term)
+      as_statement = Arel::Nodes::As.new ancestors_cte, union
+      self.class.find_by_sql(ancestors_cte.project(Arel.star).with(:recursive, as_statement).to_sql)
+    end
   end
 
   module ClassMethods
