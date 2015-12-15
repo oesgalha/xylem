@@ -1,0 +1,8 @@
+postgres:
+  adapter: postgresql
+  database: xylem_test
+  pool: 5
+  timeout: 5000
+  username: xylem
+  password: xylem-secret
+  host: localhost
