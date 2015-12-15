@@ -1,11 +1,14 @@
+### Here be dragons
+
+This is still a work in progress. Move along.
+
 # Xylem
 
 Xylem provides a simple way to store and retrieve hierarchical data through ActiveRecord.
 
 ## What
 
-Xylem uses the Adjacency List approach instead of Neste Set to store and query through hierarchical data.
-
+Xylem uses the Adjacency List approach to store and query through hierarchical data.
 
 ## Installation
 
