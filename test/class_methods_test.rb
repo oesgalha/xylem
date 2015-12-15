@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TestClassMethods < MiniTest::Test
+class ClassMethodsTest < MiniTest::Test
   def test_roots
     dad = Human.create!
     son = Human.create!(parent_id: dad.id)
