@@ -9,7 +9,7 @@ ActiveRecord::Base.establish_connection(:postgres)
 # Reset the database
 ActiveRecord::Base.connection.execute 'DROP SCHEMA public CASCADE; CREATE SCHEMA public;'
 
-class Human < ActiveRecord::Base
+class Category < ActiveRecord::Base
   act_as_tree
 
   connection.create_table table_name, force: true do |t|
