@@ -28,6 +28,28 @@ module Xylem
       as_statement = Arel::Nodes::As.new(ancestors_cte, union)
       klass.find_by_sql(ancestors_cte.project(Arel.star).with(:recursive, as_statement).to_sql, klass.all.bind_values + klass.all.bind_values)
     end
+
+    def descendants
+      klass = self.class
+      table = klass.arel_table
+      ancestors_cte = Arel::Table.new(:ancestors)
+      recursive_term = klass.all.arel.where(table[:parent_id].eq(id))
+      non_recursive_term = klass.all.arel.join(ancestors_cte).on(table[:parent_id].eq(ancestors_cte[:id]))
+      union = recursive_term.union(:all, non_recursive_term)
+      as_statement = Arel::Nodes::As.new(ancestors_cte, union)
+      klass.find_by_sql(ancestors_cte.project(Arel.star).with(:recursive, as_statement).to_sql, klass.all.bind_values + klass.all.bind_values)
+    end
+
+    def self_and_descendants
+      klass = self.class
+      table = klass.arel_table
+      ancestors_cte = Arel::Table.new(:ancestors)
+      recursive_term = klass.all.arel.where(table[:id].eq(id))
+      non_recursive_term = klass.all.arel.join(ancestors_cte).on(table[:parent_id].eq(ancestors_cte[:id]))
+      union = recursive_term.union(:all, non_recursive_term)
+      as_statement = Arel::Nodes::As.new(ancestors_cte, union)
+      klass.find_by_sql(ancestors_cte.project(Arel.star).with(:recursive, as_statement).to_sql, klass.all.bind_values + klass.all.bind_values)
+    end
   end
 
   module ClassMethods
