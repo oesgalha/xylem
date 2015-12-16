@@ -49,6 +49,42 @@ class ClassMethodsTest < MiniTest::Test
   end
 
   def test_self_and_ancestors
+    product = Category.create!
+    service = Category.create!
+
+    physical = Category.create!(parent_id: product.id)
+    digital = Category.create!(parent_id: product.id)
+
+    training = Category.create!(parent_id: service.id)
+    consultancy = Category.create!(parent_id: service.id)
+    hosting = Category.create!(parent_id: service.id)
+
+    daily_training = Category.create!(parent_id: training.id)
+    weekly_training = Category.create!(parent_id: training.id)
+
+    assert_equal [weekly_training, training, service], weekly_training.self_and_ancestors
+    assert_equal [digital, product], digital.self_and_ancestors
+    assert_equal [product], product.self_and_ancestors
+    assert_equal [service], service.self_and_ancestors
+  end
+
+  def test_scoped_self_and_ancestors
+    gibberish = Menu.create!(draft: true)
+    main = Menu.create!
+
+    option1 = Menu.create!(parent: main)
+    option2 = Menu.create!(parent: main, draft: true)
+    option3 = Menu.create!(parent: main)
+
+    suboption11 = Menu.create!(parent: option1)
+    suboption12 = Menu.create!(parent: option1)
+
+    suboption21 = Menu.create!(parent: option2)
+
+    assert_equal [suboption12, option1, main], suboption12.self_and_ancestors
+    assert_equal [suboption21], suboption21.self_and_ancestors
+    assert_equal [main], main.self_and_ancestors
+    assert_empty gibberish.self_and_ancestors
   end
 
   def test_descendants
