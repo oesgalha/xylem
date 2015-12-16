@@ -8,13 +8,14 @@ module Xylem
 
   module InstanceMethods
     def ancestors
-      table = self.class.arel_table
+      klass = self.class
+      table = klass.arel_table
       ancestors_cte = Arel::Table.new(:ancestors)
-      recursive_term = table.project([table[Arel.star]]).where(table[:id].eq(parent_id))
-      non_recursive_term = table.project([table[Arel.star]]).join(ancestors_cte).on(table[:id].eq(ancestors_cte[:parent_id]))
+      recursive_term = klass.all.arel.where(table[:id].eq(parent_id))
+      non_recursive_term = klass.all.arel.join(ancestors_cte).on(table[:id].eq(ancestors_cte[:parent_id]))
       union = recursive_term.union(:all, non_recursive_term)
-      as_statement = Arel::Nodes::As.new ancestors_cte, union
-      self.class.find_by_sql(ancestors_cte.project(Arel.star).with(:recursive, as_statement).to_sql)
+      as_statement = Arel::Nodes::As.new(ancestors_cte, union)
+      klass.find_by_sql(ancestors_cte.project(Arel.star).with(:recursive, as_statement).to_sql, klass.all.bind_values + klass.all.bind_values)
     end
   end
 

@@ -21,36 +21,34 @@ class ClassMethodsTest < MiniTest::Test
     daily_training = Category.create!(parent_id: training.id)
     weekly_training = Category.create!(parent_id: training.id)
 
-    weekly_training_ancestors = weekly_training.ancestors
-
-    assert_includes weekly_training_ancestors, training
-    assert_includes weekly_training_ancestors, service
-
-    refute_includes weekly_training_ancestors, product
-    refute_includes weekly_training_ancestors, physical
-    refute_includes weekly_training_ancestors, digital
-    refute_includes weekly_training_ancestors, consultancy
-    refute_includes weekly_training_ancestors, hosting
-    refute_includes weekly_training_ancestors, daily_training
-    refute_includes weekly_training_ancestors, weekly_training
-
-    assert_equal [training, service], weekly_training_ancestors
+    assert_equal [training, service], weekly_training.ancestors
+    assert_equal [product], digital.ancestors
 
     assert_empty product.ancestors
     assert_empty service.ancestors
+  end
 
-    digital_ancestors = digital.ancestors
+  def test_scoped_ancestors
+    gibberish = Menu.create!(draft: true)
+    main = Menu.create!
 
-    assert_includes digital_ancestors, product
+    option1 = Menu.create!(parent: main)
+    option2 = Menu.create!(parent: main, draft: true)
+    option3 = Menu.create!(parent: main)
 
-    refute_includes digital_ancestors, training
-    refute_includes digital_ancestors, service
-    refute_includes digital_ancestors, physical
-    refute_includes digital_ancestors, consultancy
-    refute_includes digital_ancestors, hosting
-    refute_includes digital_ancestors, daily_training
-    refute_includes digital_ancestors, weekly_training
-    refute_includes digital_ancestors, digital
+    suboption11 = Menu.create!(parent: option1)
+    suboption12 = Menu.create!(parent: option1)
+
+    suboption21 = Menu.create!(parent: option2)
+
+    assert_equal [option1, main], suboption12.ancestors
+
+    assert_empty suboption21.ancestors
+    assert_empty main.ancestors
+    assert_empty gibberish.ancestors
+  end
+
+  def test_self_and_ancestors
   end
 
   def test_descendants
@@ -69,9 +67,6 @@ class ClassMethodsTest < MiniTest::Test
   end
 
   def test_self_and_children
-  end
-
-  def test_self_and_ancestors
   end
 
   def test_root?
