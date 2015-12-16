@@ -1,5 +1,3 @@
-require 'pry'
-
 module Xylem
   def self.included(base)
     base.extend(ClassMethods)

@@ -2,100 +2,53 @@ require 'test_helper'
 
 class ClassMethodsTest < MiniTest::Test
   def setup
+    @product = Category.create!
+    @service = Category.create!
+    @physical = Category.create!(parent_id: @product.id)
+    @digital = Category.create!(parent_id: @product.id)
+    @training = Category.create!(parent_id: @service.id)
+    @consultancy = Category.create!(parent_id: @service.id)
+    @hosting = Category.create!(parent_id: @service.id)
+    @daily_training = Category.create!(parent_id: @training.id)
+    @weekly_training = Category.create!(parent_id: @training.id)
+
+    @gibberish = Menu.create!(draft: true)
+    @main = Menu.create!
+    @option1 = Menu.create!(parent: @main)
+    @option2 = Menu.create!(parent: @main, draft: true)
+    @option3 = Menu.create!(parent: @main)
+    @suboption11 = Menu.create!(parent: @option1)
+    @suboption12 = Menu.create!(parent: @option1)
+  end
+
+  def teardown
     ActiveRecord::Base.connection.tables.each do |table|
       ActiveRecord::Base.connection.execute "DELETE FROM #{table}"
     end
   end
 
   def test_root
-    product = Category.create!
-    service = Category.create!
-
-    assert_equal product, Category.root
+    assert_equal @product, Category.root
   end
 
   def test_scoped_root
-    gibberish = Menu.create!(draft: true)
-    main = Menu.create!
-
-    assert_equal main, Menu.root
+    assert_equal @main, Menu.root
   end
 
   def test_roots
-    product = Category.create!
-    service = Category.create!
-
-    physical = Category.create!(parent_id: product.id)
-    digital = Category.create!(parent_id: product.id)
-
-    training = Category.create!(parent_id: service.id)
-
-    assert_includes Category.roots, product
-    assert_includes Category.roots, service
-
-    refute_includes Category.roots, physical
-    refute_includes Category.roots, digital
-    refute_includes Category.roots, training
+    assert_equal [@product, @service], Category.roots
   end
 
   def test_scoped_roots
-    gibberish = Menu.create!(draft: true)
-    main = Menu.create!
-
-    option1 = Menu.create!(parent: main)
-    option2 = Menu.create!(parent: main)
-
-    assert_includes Menu.roots, main
-
-    refute_includes Menu.roots, gibberish
-    refute_includes Menu.roots, option1
-    refute_includes Menu.roots, option2
+    assert_equal [@main], Menu.roots
   end
 
   def test_leaves
-    product = Category.create!
-    service = Category.create!
-
-    physical = Category.create!(parent_id: product.id)
-    digital = Category.create!(parent_id: product.id)
-
-    training = Category.create!(parent_id: service.id)
-    consultancy = Category.create!(parent_id: service.id)
-    hosting = Category.create!(parent_id: service.id)
-
-    daily_training = Category.create!(parent_id: training.id)
-    weekly_training = Category.create!(parent_id: training.id)
-
-    assert_includes Category.leaves, physical
-    assert_includes Category.leaves, digital
-    assert_includes Category.leaves, consultancy
-    assert_includes Category.leaves, hosting
-    assert_includes Category.leaves, daily_training
-    assert_includes Category.leaves, weekly_training
-
-    refute_includes Category.leaves, product
-    refute_includes Category.leaves, service
-    refute_includes Category.leaves, training
+    assert_equal [@physical, @digital, @consultancy, @hosting, @daily_training, @weekly_training], Category.leaves
   end
 
   def test_scoped_leaves
-    gibberish = Menu.create!(draft: true)
-    main = Menu.create!
-
-    option1 = Menu.create!(parent: main)
-    option2 = Menu.create!(parent: main, draft: true)
-    option3 = Menu.create!(parent: main)
-
-    suboption11 = Menu.create!(parent: option1)
-    suboption12 = Menu.create!(parent: option1)
-
-    assert_includes Menu.leaves, option3
-    assert_includes Menu.leaves, suboption11
-    assert_includes Menu.leaves, suboption12
-
-    refute_includes Menu.roots, gibberish
-    refute_includes Menu.roots, option1
-    refute_includes Menu.roots, option2
+    assert_equal [@option3, @suboption11, @suboption12], Menu.leaves
   end
 
   def test_plain_model
