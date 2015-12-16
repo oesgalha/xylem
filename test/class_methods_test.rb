@@ -14,6 +14,13 @@ class ClassMethodsTest < MiniTest::Test
     assert_equal product, Category.root
   end
 
+  def test_scoped_root
+    gibberish = Menu.create!(draft: true)
+    main = Menu.create!
+
+    assert_equal main, Menu.root
+  end
+
   def test_roots
     product = Category.create!
     service = Category.create!
@@ -29,6 +36,20 @@ class ClassMethodsTest < MiniTest::Test
     refute_includes Category.roots, physical
     refute_includes Category.roots, digital
     refute_includes Category.roots, training
+  end
+
+  def test_scoped_roots
+    gibberish = Menu.create!(draft: true)
+    main = Menu.create!
+
+    option1 = Menu.create!(parent: main)
+    option2 = Menu.create!(parent: main)
+
+    assert_includes Menu.roots, main
+
+    refute_includes Menu.roots, gibberish
+    refute_includes Menu.roots, option1
+    refute_includes Menu.roots, option2
   end
 
   def test_leaves
@@ -55,6 +76,26 @@ class ClassMethodsTest < MiniTest::Test
     refute_includes Category.leaves, product
     refute_includes Category.leaves, service
     refute_includes Category.leaves, training
+  end
+
+  def test_scoped_leaves
+    gibberish = Menu.create!(draft: true)
+    main = Menu.create!
+
+    option1 = Menu.create!(parent: main)
+    option2 = Menu.create!(parent: main, draft: true)
+    option3 = Menu.create!(parent: main)
+
+    suboption11 = Menu.create!(parent: option1)
+    suboption12 = Menu.create!(parent: option1)
+
+    assert_includes Menu.leaves, option3
+    assert_includes Menu.leaves, suboption11
+    assert_includes Menu.leaves, suboption12
+
+    refute_includes Menu.roots, gibberish
+    refute_includes Menu.roots, option1
+    refute_includes Menu.roots, option2
   end
 
   def test_plain_model
