@@ -142,8 +142,19 @@ class InstanceMethodsTest < MiniTest::Test
   end
 
   def test_root?
+    assert @product.root?
+    assert @main.root?
+    refute @physical.root?
+    refute @option3.root?
   end
 
   def test_leaf?
+    assert @daily_training.leaf?
+    assert @consultancy.leaf?
+    assert @suboption12.leaf?
+    assert @option3.leaf?
+    refute @service.leaf?
+    refute @training.leaf?
+    refute @option1.leaf?
   end
 end

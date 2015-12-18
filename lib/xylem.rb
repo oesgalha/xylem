@@ -71,6 +71,14 @@ module Xylem
     def self_and_children
       [self] + children
     end
+
+    def root?
+      parent.nil?
+    end
+
+    def leaf?
+      children.size == 0
+    end
   end
 
   module ClassMethods
