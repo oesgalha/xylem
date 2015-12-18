@@ -122,9 +122,23 @@ class InstanceMethodsTest < MiniTest::Test
   end
 
   def test_children
+    assert_equal [@physical, @digital], @product.children
+    assert_equal [@daily_training, @weekly_training], @training.children
+  end
+
+  def test_scoped_children
+    assert_equal [@option1, @option3], @main.children
+    assert_equal [@suboption11, @suboption12], @option1.children
   end
 
   def test_self_and_children
+    assert_equal [@product, @physical, @digital], @product.self_and_children
+    assert_equal [@training, @daily_training, @weekly_training], @training.self_and_children
+  end
+
+  def test_scoped_self_and_children
+    assert_equal [@product, @physical, @digital], @product.self_and_children
+    assert_equal [@training, @daily_training, @weekly_training], @training.self_and_children
   end
 
   def test_root?

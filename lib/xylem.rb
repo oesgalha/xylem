@@ -67,6 +67,10 @@ module Xylem
     def self_and_siblings
       self.class.where(parent_id: parent_id)
     end
+
+    def self_and_children
+      [self] + children
+    end
   end
 
   module ClassMethods
