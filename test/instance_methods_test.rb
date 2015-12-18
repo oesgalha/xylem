@@ -89,12 +89,39 @@ class InstanceMethodsTest < MiniTest::Test
   end
 
   def test_root
+    assert_equal @service, @weekly_training.root
+    assert_equal @product, @digital.root
+    refute @product.root
+  end
+
+  def test_scoped_root
+    assert_equal @main, @suboption11.root
+    assert_equal @main, @option3.root
+    refute @main.root
+    refute @suboption21.root
   end
 
   def test_siblings
+    assert_equal [@digital], @physical.siblings
+    assert_equal [@training, @hosting], @consultancy.siblings
+  end
+
+  def test_scoped_siblings
+    assert_equal [@option3], @option1.siblings
+    assert_equal [@suboption11], @suboption12.siblings
   end
 
   def test_self_and_siblings
+    assert_equal [@physical, @digital], @physical.self_and_siblings
+    assert_equal [@training, @consultancy, @hosting], @consultancy.self_and_siblings
+  end
+
+  def test_scoped_self_and_siblings
+    assert_equal [@option1, @option3], @option1.self_and_siblings
+    assert_equal [@suboption11, @suboption12], @suboption12.self_and_siblings
+  end
+
+  def test_children
   end
 
   def test_self_and_children

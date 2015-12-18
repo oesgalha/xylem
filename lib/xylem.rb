@@ -48,6 +48,25 @@ module Xylem
       as_statement = Arel::Nodes::As.new(ancestors_cte, union)
       klass.find_by_sql(ancestors_cte.project(Arel.star).with(:recursive, as_statement).to_sql, klass.all.bind_values + klass.all.bind_values)
     end
+
+    def root
+      klass = self.class
+      table = klass.arel_table
+      ancestors_cte = Arel::Table.new(:ancestors)
+      recursive_term = klass.all.arel.where(table[:id].eq(parent_id))
+      non_recursive_term = klass.all.arel.join(ancestors_cte).on(table[:id].eq(ancestors_cte[:parent_id]))
+      union = recursive_term.union(:all, non_recursive_term)
+      as_statement = Arel::Nodes::As.new(ancestors_cte, union)
+      klass.find_by_sql(ancestors_cte.project(Arel.star).with(:recursive, as_statement).where(ancestors_cte[:parent_id].eq(nil)).take(1).to_sql, klass.all.bind_values + klass.all.bind_values).first
+    end
+
+    def siblings
+      self.class.where(parent_id: parent_id).where.not(id: id)
+    end
+
+    def self_and_siblings
+      self.class.where(parent_id: parent_id)
+    end
   end
 
   module ClassMethods
@@ -60,7 +79,8 @@ module Xylem
     end
 
     def leaves
-      where(arel_table[:id].not_in(arel_table.project([arel_table[:parent_id]]).where(arel_table[:parent_id].not_eq(nil)).distinct))
+      t = arel_table
+      where(t[:id].not_in(t.project([t[:parent_id]]).where(t[:parent_id].not_eq(nil)).distinct))
     end
   end
 end
