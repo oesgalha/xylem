@@ -15,3 +15,9 @@ before_script:
   - sudo -u postgres createuser xylem -s
   - sudo -u postgres psql -c "ALTER USER xylem WITH PASSWORD 'xylem-secret';"
   - sudo -u postgres createdb -O xylem xylem_test
+addons:
+  apt:
+    sources:
+    - debian-sid
+    packages:
+    - sqlite3
