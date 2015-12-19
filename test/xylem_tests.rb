@@ -4,10 +4,14 @@ require 'minitest/pride'
 require 'active_record'
 require 'xylem'
 
-ActiveRecord::Base.configurations = YAML::load_file(File.dirname(__FILE__) + '/db/database.yml')
-ActiveRecord::Base.establish_connection(:postgres)
-# Reset the database
-ActiveRecord::Base.connection.execute 'DROP SCHEMA public CASCADE; CREATE SCHEMA public;'
+if ENV['DB'] == 'sqlite'
+  ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
+else
+  ActiveRecord::Base.configurations = {'pg'=>{'adapter'=>'postgresql','database'=>'xylem_test','username'=>'xylem','password'=>'xylem-secret','host'=>'localhost'}}
+  ActiveRecord::Base.establish_connection(:pg)
+  # Reset the database
+  ActiveRecord::Base.connection.execute 'DROP SCHEMA public CASCADE; CREATE SCHEMA public;'
+end
 
 class Category < ActiveRecord::Base
   act_as_tree
