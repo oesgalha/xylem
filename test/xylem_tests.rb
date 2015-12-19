@@ -4,13 +4,16 @@ require 'minitest/pride'
 require 'active_record'
 require 'xylem'
 
-if ENV['DB'] == 'sqlite'
+case ENV['DB']
+when 'sqlite'
   ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
-else
+when 'postgres'
   ActiveRecord::Base.configurations = {'pg'=>{'adapter'=>'postgresql','database'=>'xylem_test','username'=>'xylem','password'=>'xylem-secret','host'=>'localhost'}}
   ActiveRecord::Base.establish_connection(:pg)
   # Reset the database
   ActiveRecord::Base.connection.execute 'DROP SCHEMA public CASCADE; CREATE SCHEMA public;'
+else
+  fail 'Please provide a environment varible DB with either "postgres" or "sqlite" to define the tested database'
 end
 
 class Category < ActiveRecord::Base
