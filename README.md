@@ -3,6 +3,7 @@
 This is still a work in progress. Move along.
 
 # Xylem
+[![Build Status](https://travis-ci.org/oesgalha/xylem.svg)](https://travis-ci.org/oesgalha/xylem)
 
 Xylem provides a simple way to store and retrieve hierarchical data through ActiveRecord.
 
