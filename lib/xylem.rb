@@ -6,58 +6,23 @@ module Xylem
 
   module InstanceMethods
     def ancestors
-      klass = self.class
-      table = klass.arel_table
-      ancestors_cte = Arel::Table.new(:ancestors)
-      recursive_term = klass.all.arel.where(table[:id].eq(parent_id))
-      non_recursive_term = klass.all.arel.join(ancestors_cte).on(table[:id].eq(ancestors_cte[:parent_id]))
-      union = recursive_term.union(:all, non_recursive_term)
-      as_statement = Arel::Nodes::As.new(ancestors_cte, union)
-      klass.find_by_sql(ancestors_cte.project(Arel.star).with(:recursive, as_statement).to_sql, klass.all.bind_values + klass.all.bind_values)
+      _xylem_query(:id, parent_id, :id, :parent_id)
     end
 
     def self_and_ancestors
-      klass = self.class
-      table = klass.arel_table
-      ancestors_cte = Arel::Table.new(:ancestors)
-      recursive_term = klass.all.arel.where(table[:id].eq(id))
-      non_recursive_term = klass.all.arel.join(ancestors_cte).on(table[:id].eq(ancestors_cte[:parent_id]))
-      union = recursive_term.union(:all, non_recursive_term)
-      as_statement = Arel::Nodes::As.new(ancestors_cte, union)
-      klass.find_by_sql(ancestors_cte.project(Arel.star).with(:recursive, as_statement).to_sql, klass.all.bind_values + klass.all.bind_values)
+      _xylem_query(:id, id, :id, :parent_id)
     end
 
     def descendants
-      klass = self.class
-      table = klass.arel_table
-      ancestors_cte = Arel::Table.new(:ancestors)
-      recursive_term = klass.all.arel.where(table[:parent_id].eq(id))
-      non_recursive_term = klass.all.arel.join(ancestors_cte).on(table[:parent_id].eq(ancestors_cte[:id]))
-      union = recursive_term.union(:all, non_recursive_term)
-      as_statement = Arel::Nodes::As.new(ancestors_cte, union)
-      klass.find_by_sql(ancestors_cte.project(Arel.star).with(:recursive, as_statement).to_sql, klass.all.bind_values + klass.all.bind_values)
+      _xylem_query(:parent_id, id, :parent_id, :id)
     end
 
     def self_and_descendants
-      klass = self.class
-      table = klass.arel_table
-      ancestors_cte = Arel::Table.new(:ancestors)
-      recursive_term = klass.all.arel.where(table[:id].eq(id))
-      non_recursive_term = klass.all.arel.join(ancestors_cte).on(table[:parent_id].eq(ancestors_cte[:id]))
-      union = recursive_term.union(:all, non_recursive_term)
-      as_statement = Arel::Nodes::As.new(ancestors_cte, union)
-      klass.find_by_sql(ancestors_cte.project(Arel.star).with(:recursive, as_statement).to_sql, klass.all.bind_values + klass.all.bind_values)
+      _xylem_query(:id, id, :parent_id, :id)
     end
 
     def root
-      klass = self.class
-      table = klass.arel_table
-      ancestors_cte = Arel::Table.new(:ancestors)
-      recursive_term = klass.all.arel.where(table[:id].eq(parent_id))
-      non_recursive_term = klass.all.arel.join(ancestors_cte).on(table[:id].eq(ancestors_cte[:parent_id]))
-      union = recursive_term.union(:all, non_recursive_term)
-      as_statement = Arel::Nodes::As.new(ancestors_cte, union)
-      klass.find_by_sql(ancestors_cte.project(Arel.star).with(:recursive, as_statement).where(ancestors_cte[:parent_id].eq(nil)).take(1).to_sql, klass.all.bind_values + klass.all.bind_values).first
+      ancestors.last
     end
 
     def siblings
@@ -78,6 +43,13 @@ module Xylem
 
     def leaf?
       children.size == 0
+    end
+
+    private
+
+    def _xylem_query(where_col, where_val, join_lft_col, join_rgt_col)
+      rcte = Arel::Table.new(:recusive_cte)
+      self.class.find_by_sql(rcte.project(Arel.star).with(:recursive, Arel::Nodes::As.new(rcte, self.class.all.arel.where(self.class.arel_table[where_col].eq(where_val)).union(:all, self.class.all.arel.join(rcte).on(self.class.arel_table[join_lft_col].eq(rcte[join_rgt_col]))))).to_sql, self.class.all.bind_values + self.class.all.bind_values)
     end
   end
 
