@@ -1,8 +1,5 @@
 language: ruby
 cache: bundler
-os:
-  - linux
-  - osx
 rvm:
   - 2.2.4
   - 2.1.8

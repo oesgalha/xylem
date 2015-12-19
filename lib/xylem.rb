@@ -1,7 +1,6 @@
 module Xylem
   def self.included(base)
     base.extend(ClassMethods)
-    base.include(InstanceMethods)
   end
 
   module InstanceMethods
@@ -75,5 +74,6 @@ class ActiveRecord::Base
     belongs_to :parent, class_name: name
 
     include Xylem
+    include Xylem::InstanceMethods
   end
 end
