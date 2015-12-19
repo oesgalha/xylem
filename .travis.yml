@@ -9,5 +9,9 @@ rvm:
   - 2.0.0
   - 1.9.3
 env:
-  - DB=sqlite3
+  - DB=sqlite
   - DB=postgres
+before_script:
+  - sudo -u postgres createuser xylem -s
+  - sudo -u postgres psql -c "ALTER USER xylem WITH PASSWORD 'xylem-secret';"
+  - sudo -u postgres createdb -O xylem xylem_test
