@@ -1,6 +1,37 @@
-require 'test_helper'
+require 'minitest/autorun'
+require 'minitest/pride'
 
-class InstanceMethodsTest < MiniTest::Test
+require 'active_record'
+require 'xylem'
+
+ActiveRecord::Base.configurations = YAML::load_file(File.dirname(__FILE__) + '/db/database.yml')
+ActiveRecord::Base.establish_connection(:postgres)
+# Reset the database
+ActiveRecord::Base.connection.execute 'DROP SCHEMA public CASCADE; CREATE SCHEMA public;'
+
+class Category < ActiveRecord::Base
+  act_as_tree
+  connection.create_table table_name, force: true do |t|
+    t.integer :parent_id
+  end
+end
+
+class Menu < ActiveRecord::Base
+  act_as_tree
+  default_scope { where(draft: false) }
+  connection.create_table table_name, force: true do |t|
+    t.integer :parent_id
+    t.boolean :draft, default: false
+  end
+end
+
+class PlainModel < ActiveRecord::Base
+  connection.create_table table_name, force: true do |t|
+    t.string :name
+  end
+end
+
+class XylemTestCase < MiniTest::Test
   def setup
     @product = Category.create!
     @service = Category.create!
@@ -23,11 +54,44 @@ class InstanceMethodsTest < MiniTest::Test
   end
 
   def teardown
-    ActiveRecord::Base.connection.tables.each do |table|
-      ActiveRecord::Base.connection.execute "DELETE FROM #{table}"
-    end
+    ar_connection = ActiveRecord::Base.connection
+    ar_connection.tables.each { |t| ar_connection.execute "DELETE FROM #{t}" }
+  end
+end
+
+class ClassMethodsTest < XylemTestCase
+  def test_root
+    assert_equal @product, Category.root
   end
 
+  def test_scoped_root
+    assert_equal @main, Menu.root
+  end
+
+  def test_roots
+    assert_equal [@product, @service], Category.roots
+  end
+
+  def test_scoped_roots
+    assert_equal [@main], Menu.roots
+  end
+
+  def test_leaves
+    assert_equal [@physical, @digital, @consultancy, @hosting, @daily_training, @weekly_training], Category.leaves
+  end
+
+  def test_scoped_leaves
+    assert_equal [@option3, @suboption11, @suboption12, @suboption21], Menu.leaves
+  end
+
+  def test_plain_model
+    refute_respond_to PlainModel, :root
+    refute_respond_to PlainModel, :roots
+    refute_respond_to PlainModel, :leaves
+  end
+end
+
+class InstanceMethodsTest < XylemTestCase
   def test_ancestors
     assert_equal [@training, @service], @weekly_training.ancestors
     assert_equal [@product], @digital.ancestors
