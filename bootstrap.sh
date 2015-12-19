@@ -22,9 +22,7 @@ install Git git
 install SQLite sqlite3 libsqlite3-dev
 
 install PostgreSQL postgresql postgresql-contrib libpq-dev
-sudo -u postgres createuser xylem -s
-sudo -u postgres psql -c "ALTER USER xylem WITH PASSWORD 'xylem-secret';"
-sudo -u postgres createdb -O xylem xylem_test
+sudo -u postgres createdb -O postgres xylem_test
 
 install 'Nokogiri dependencies' libxml2 libxml2-dev libxslt1-dev
 install 'ExecJS runtime' nodejs

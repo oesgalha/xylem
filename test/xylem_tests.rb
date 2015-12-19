@@ -1,3 +1,5 @@
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
 require 'minitest/autorun'
 require 'minitest/pride'
 
@@ -8,7 +10,7 @@ case ENV['DB']
 when 'sqlite'
   ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
 when 'postgres'
-  ActiveRecord::Base.configurations = {'pg'=>{'adapter'=>'postgresql','database'=>'xylem_test','username'=>'xylem','password'=>'xylem-secret','host'=>'localhost'}}
+  ActiveRecord::Base.configurations = {'pg'=>{'adapter'=>'postgresql','database'=>'xylem_test','username'=>'postgres'}}
   ActiveRecord::Base.establish_connection(:pg)
   # Reset the database
   ActiveRecord::Base.connection.execute 'DROP SCHEMA public CASCADE; CREATE SCHEMA public;'
