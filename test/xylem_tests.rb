@@ -3,7 +3,6 @@ CodeClimate::TestReporter.start
 require 'minitest/autorun'
 require 'minitest/pride'
 
-require 'active_record'
 require 'xylem'
 
 case ENV['DB']

@@ -1,3 +1,5 @@
+require 'active_record'
+
 module Xylem
   def self.included(base)
     base.extend(ClassMethods)
