@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Xylem::VERSION
   spec.authors       = ['Oscar Esgalha']
   spec.email         = ['oscaresgalha@gmail.com']
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ''
+  spec.summary       = %q{Xylem uses the Adjacency List approach to store and query through hierarchical data with ActiveRecord.}
+  spec.description   = %q{Xylem provides a simple way to store and retrieve hierarchical data through ActiveRecord.}
+  spec.homepage      = 'https://github.com/oesgalha/xylem'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
