@@ -1,0 +1,32 @@
+[
+  {
+    "name": "insertion",
+    "ips": 7.721853007625269,
+    "stddev": 2
+  },
+  {
+    "name": "parent",
+    "ips": 569.4524509694182,
+    "stddev": 191
+  },
+  {
+    "name": "children",
+    "ips": 154.39379306573127,
+    "stddev": 34
+  },
+  {
+    "name": "roots",
+    "ips": 820.8230612972056,
+    "stddev": 119
+  },
+  {
+    "name": "ancestors",
+    "ips": 346.3686578783685,
+    "stddev": 70
+  },
+  {
+    "name": "descendants",
+    "ips": 52.86002694684352,
+    "stddev": 7
+  }
+]
