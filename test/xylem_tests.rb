@@ -58,7 +58,7 @@ class XylemTestCase < MiniTest::Test
     @option3 = Menu.create!(parent: @main)
     @suboption11 = Menu.create!(parent: @option1)
     @suboption12 = Menu.create!(parent: @option1)
-    @suboption21 = Menu.create!(parent: @option2)
+    @suboption21 = Menu.create!(parent: @option2, draft: true)
   end
 
   def teardown
@@ -89,7 +89,7 @@ class ClassMethodsTest < XylemTestCase
   end
 
   def test_scoped_leaves
-    assert_equal [@option3, @suboption11, @suboption12, @suboption21], Menu.leaves
+    assert_equal [@option3, @suboption11, @suboption12], Menu.leaves
   end
 
   def test_plain_model
@@ -101,29 +101,27 @@ end
 
 class InstanceMethodsTest < XylemTestCase
   def test_ancestors
-    assert_equal [@training, @service], @weekly_training.ancestors
+    assert_equal [@service, @training], @weekly_training.ancestors
     assert_equal [@product], @digital.ancestors
     assert_empty @product.ancestors
     assert_empty @service.ancestors
   end
 
   def test_scoped_ancestors
-    assert_equal [@option1, @main], @suboption12.ancestors
-    assert_empty @suboption21.ancestors
+    assert_equal [@main, @option1], @suboption12.ancestors
     assert_empty @main.ancestors
     assert_empty @gibberish.ancestors
   end
 
   def test_self_and_ancestors
-    assert_equal [@weekly_training, @training, @service], @weekly_training.self_and_ancestors
-    assert_equal [@digital, @product], @digital.self_and_ancestors
+    assert_equal [@service, @training, @weekly_training], @weekly_training.self_and_ancestors
+    assert_equal [@product, @digital], @digital.self_and_ancestors
     assert_equal [@product], @product.self_and_ancestors
     assert_equal [@service], @service.self_and_ancestors
   end
 
   def test_scoped_self_and_ancestors
-    assert_equal [@suboption12, @option1, @main], @suboption12.self_and_ancestors
-    assert_equal [@suboption21], @suboption21.self_and_ancestors
+    assert_equal [@main, @option1, @suboption12], @suboption12.self_and_ancestors
     assert_equal [@main], @main.self_and_ancestors
     assert_empty @gibberish.self_and_ancestors
   end
@@ -156,7 +154,6 @@ class InstanceMethodsTest < XylemTestCase
     assert_equal [@main, @option1, @option3, @suboption11, @suboption12], @main.self_and_descendants
     assert_equal [@option1, @suboption11, @suboption12], @option1.self_and_descendants
     assert_equal [@suboption11], @suboption11.self_and_descendants
-    assert_equal [@suboption21], @suboption21.self_and_descendants
     assert_empty @gibberish.self_and_descendants
   end
 
@@ -170,7 +167,6 @@ class InstanceMethodsTest < XylemTestCase
     assert_equal @main, @suboption11.root
     assert_equal @main, @option3.root
     refute @main.root
-    refute @suboption21.root
   end
 
   def test_siblings
