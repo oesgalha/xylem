@@ -8,7 +8,7 @@ gemfile(true) do
 
   case ENV['BENCH_GEM']
   when 'xylem'
-    gem 'xylem', github: 'oesgalha/xylem'
+    gem 'xylem', path: '..'
   when 'acts_as_tree'
     gem 'acts_as_tree', github: 'amerine/acts_as_tree'
   when 'awesome_nested_set'
@@ -22,7 +22,7 @@ gemfile(true) do
 end
 
 ActiveRecord::Base.establish_connection(adapter: 'postgresql', database: 'xylem_test', username: 'postgres')
-ActiveRecord::Base.connection.execute 'DROP SCHEMA public CASCADE; CREATE SCHEMA public;'
+ActiveRecord::Base.connection.execute('DROP SCHEMA public CASCADE; CREATE SCHEMA public;')
 
 case ENV['BENCH_GEM']
 when 'xylem'

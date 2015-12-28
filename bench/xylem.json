@@ -1,32 +1,32 @@
 [
   {
     "name": "insertion",
-    "ips": 527.2217584216514,
-    "stddev": 21
+    "ips": 600.964555391788,
+    "stddev": 34
   },
   {
     "name": "parent",
-    "ips": 834.27549021049,
-    "stddev": 72
+    "ips": 1070.2536522884402,
+    "stddev": 120
   },
   {
     "name": "children",
-    "ips": 13.973114366797514,
+    "ips": 11.90851991649796,
     "stddev": 2
   },
   {
     "name": "roots",
-    "ips": 1593.1569982400633,
-    "stddev": 151
+    "ips": 1713.3724759018537,
+    "stddev": 210
   },
   {
     "name": "ancestors",
-    "ips": 531.1931863270745,
-    "stddev": 48
+    "ips": 511.49023662770406,
+    "stddev": 61
   },
   {
     "name": "descendants",
-    "ips": 14.831384232481646,
-    "stddev": 1
+    "ips": 12.000439734178782,
+    "stddev": 2
   }
 ]
