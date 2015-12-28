@@ -1,4 +1,4 @@
-require "codeclimate-test-reporter"
+require 'codeclimate-test-reporter'
 CodeClimate::TestReporter.start
 require 'minitest/autorun'
 require 'minitest/pride'
@@ -7,12 +7,10 @@ require 'xylem'
 
 case ENV['DB']
 when 'sqlite'
-  ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
+  ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
 when 'postgres'
-  ActiveRecord::Base.configurations = {'pg'=>{'adapter'=>'postgresql','database'=>'xylem_test','username'=>'postgres'}}
-  ActiveRecord::Base.establish_connection(:pg)
-  # Reset the database
-  ActiveRecord::Base.connection.execute 'DROP SCHEMA public CASCADE; CREATE SCHEMA public;'
+  ActiveRecord::Base.establish_connection(adapter: 'postgresql', database: 'xylem_test', username: 'postgres')
+  ActiveRecord::Base.connection.execute('DROP SCHEMA public CASCADE; CREATE SCHEMA public;')
 else
   fail 'Please provide a environment varible DB with either "postgres" or "sqlite" to define the tested database'
 end
