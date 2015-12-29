@@ -16,14 +16,14 @@ else
 end
 
 class Category < ActiveRecord::Base
-  act_as_tree
+  acts_as_tree
   connection.create_table table_name, force: true do |t|
     t.integer :parent_id
   end
 end
 
 class Menu < ActiveRecord::Base
-  act_as_tree
+  acts_as_tree
   default_scope { where(draft: false) }
   connection.create_table table_name, force: true do |t|
     t.integer :parent_id

@@ -75,7 +75,7 @@ module Xylem
 end
 
 class ActiveRecord::Base
-  def self.act_as_tree
+  def self.acts_as_tree
     has_many :children, class_name: name, foreign_key: :parent_id
     belongs_to :parent, class_name: name
 
