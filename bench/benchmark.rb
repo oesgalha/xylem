@@ -10,12 +10,12 @@ gemfile(true) do
   when 'xylem'
     gem 'xylem', path: '..'
   when 'acts_as_tree'
-    gem 'acts_as_tree', github: 'amerine/acts_as_tree'
+    gem 'acts_as_tree'
   when 'awesome_nested_set'
     gem 'activesupport', require: 'active_support/core_ext/module/delegation'
-    gem 'awesome_nested_set', github: 'collectiveidea/awesome_nested_set'
+    gem 'awesome_nested_set'
   when 'ancestry'
-    gem 'ancestry', github: 'stefankroes/ancestry'
+    gem 'ancestry'
   else
     fail 'Please provide a environment variable BENCH_GEM with one o the following values: [xylem, acts_as_tree, awesome_nested_set, ancestry]'
   end

@@ -134,7 +134,6 @@ Here are some other gems you could use to achieve the same objective:
 * [acts_as_tree](https://github.com/amerine/acts_as_tree)
 * [awesome_nested_set](https://github.com/collectiveidea/awesome_nested_set)
 * [ancestry](https://github.com/stefankroes/ancestry)
-* [acts_as_sane_tree](https://github.com/chrisroberts/acts_as_sane_tree)
 
 ## Contributing
 
