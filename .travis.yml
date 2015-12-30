@@ -5,6 +5,11 @@ rvm:
   - 2.1.8
   - 2.0.0
   - 1.9.3
+gemfile:
+  - gemfiles/ar_4.0.gemfile
+  - gemfiles/ar_4.1.gemfile
+  - gemfiles/ar_4.2.gemfile
+  - gemfiles/ar_5beta.gemfile
 before_script:
   - psql -c 'create database xylem_test;' -U postgres
 addons:

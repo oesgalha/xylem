@@ -2,6 +2,7 @@
 /.vagrant/
 /.yardoc
 /Gemfile.lock
+/gemfiles/*.gemfile.lock
 /_yardoc/
 /coverage/
 /doc/
