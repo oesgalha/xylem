@@ -21,11 +21,13 @@ env:
   matrix:
     - DB=sqlite
     - DB=postgres
-    exclude:
-      gemfile: gemfiles/ar_5beta.gemfile
-        rvm:
-          - 2.1.8
-          - 2.0.0
-          - 1.9.3
   global:
     secure: "PSK+NqEOpz6P3lDxQ/dIYg6F2FQrdtrkiE72hbL2S0uJ+BJMGp/Uw3h23ihUmlJAPqjNjtxyoslKYLiCiUje/6ID7DhxL8q2Yerqtf0mnMnHrX2mmSkrXrLva9RkMEbpXlHUVT7eZyEZKaw/3ZL917XPo2/M/dX8e0zwtUjhfOEejzXvWuW53A+B155ghpKnB9krbI71CXzK9fsPGR9fi4Mb7+eyZ24Qi3snrRADz9gQbpCG6rLs1j0E052NnLCttkMYU0d5+K9VI+eyDnWboiPThDY/iCw7arTkE6HPjnPbtZp2/GyiOQMpGxV8pzBrtAiy167wUzzhdhtKhLUvl0RUKyRY811N9EJAXEoXydf+r/SHCYNNrTaKKf/dMuTJT1YKFiqthlFS3lFT4f3JduRoPT0YsvPliAWDSdIG1XOINg5DnrNtVgKdwfLjb4klUK4MAw2cwF2M0iKbaNaj9AAduMctRxJyfY91+uCMOnnj4KXNXDzcUjLqXyZPd2qPBWf9wU1lL7mll/B2UDHuAaKqVDe18yut4LeszN0JFClZdGNlSdYXfj/1+C5b80hd5f8ckzlZ5ZYkksOTPDcByev1uvkDThSixru+LI8kYyTENgRAptMSHrUFmGn4XINELOvJi9dsjq9nhSC3DP30dCcddQalcxcSZQI8EeWOVb4="
+matrix:
+  exclude:
+  - rvm: 1.9.3
+    gemfile: gemfiles/ar_5beta.gemfile
+  - rvm: 2.0.0
+    gemfile: gemfiles/ar_5beta.gemfile
+  - rvm: 2.1.8
+    gemfile: gemfiles/ar_5beta.gemfile
