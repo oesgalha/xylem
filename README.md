@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/oesgalha/xylem.svg)](https://travis-ci.org/oesgalha/xylem)
 [![Code Climate](https://codeclimate.com/github/oesgalha/xylem/badges/gpa.svg)](https://codeclimate.com/github/oesgalha/xylem)
 [![Test Coverage](https://codeclimate.com/github/oesgalha/xylem/badges/coverage.svg)](https://codeclimate.com/github/oesgalha/xylem/coverage)
+[![Dependency Status](https://gemnasium.com/oesgalha/xylem.svg)](https://gemnasium.com/oesgalha/xylem)
 
  :palm_tree: Xylem provides a simple way to store and retrieve hierarchical data in ActiveRecord.
 
@@ -117,6 +118,8 @@ child1.self_and_siblings    # => [ child1, child2 ]
 
 ## Dependencies
 
+* ActiveRecord 4+
+
 This gem relies on the `Recursive CTE` feature which was introduced to SQL in the 1999 revision.
 So you need a database management system that implements it. This gem is tested against PostgreSQL and SQLite, those started to support the recursive CTE in the following versions:
 * PostgreSQL 8.4+
@@ -124,7 +127,7 @@ So you need a database management system that implements it. This gem is tested 
 
 It seems that MySQL still has no support to it. If you use MySQL you can look for other gems to help you deal with models organized in trees, check the Alternatives section bellow.
 
-Your ActiveRecord version should be 3.2 or newer.
+This gem is tested against ruby 1.9.3 and newer only.
 
 ## Alternatives
 
