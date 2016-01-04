@@ -1,10 +1,6 @@
 require 'active_record'
 
 module Xylem
-  def self.included(base)
-    base.extend(ClassMethods)
-  end
-
   module InstanceMethods
     def ancestors
       _xylem_query(:id, parent_id, :id, :parent_id, :desc)
@@ -75,11 +71,26 @@ module Xylem
 end
 
 class ActiveRecord::Base
-  def self.acts_as_tree
-    has_many :children, class_name: name, foreign_key: :parent_id
-    belongs_to :parent, class_name: name
+  def self.acts_as_tree(options = {})
+    config = {
+      counter_cache: options[:counter_cache] || nil,
+      dependent: options[:destroy] || :destroy,
+      touch: options[:touch] || false
+    }
 
-    include Xylem
+    has_many :children,
+      class_name: name,
+      foreign_key: :parent_id,
+      dependent: config[:dependent],
+      inverse_of: :parent
+
+    belongs_to :parent,
+      class_name: name,
+      counter_cache: config[:counter_cache],
+      touch: config[:touch],
+      inverse_of: :children
+
+    extend  Xylem::ClassMethods
     include Xylem::InstanceMethods
   end
 end
