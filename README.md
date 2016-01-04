@@ -148,7 +148,7 @@ Here are some other gems you could use to achieve the same objective:
 
 ## License
 
-Copyright (c) 2015 Oscar Esgalha
+Copyright (c) 2015-2016 Oscar Esgalha
 
 MIT License
 
