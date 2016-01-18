@@ -4,7 +4,7 @@
 [![Test Coverage](https://codeclimate.com/github/oesgalha/xylem/badges/coverage.svg)](https://codeclimate.com/github/oesgalha/xylem/coverage)
 [![Dependency Status](https://gemnasium.com/oesgalha/xylem.svg)](https://gemnasium.com/oesgalha/xylem)
 
- :palm_tree: Xylem provides a simple way to store and retrieve hierarchical data in ActiveRecord.
+Xylem provides a simple way to store and retrieve hierarchical data in ActiveRecord.
 
 ## What
 
@@ -63,7 +63,14 @@ And you are ready to go! Check the config options in the Usage section below.
 
 ### acts_as_tree options
 
-TODO
+* :counter_cache => The name of the column that will cache the node children count. In order to use this, you need to create an integer column with the same name (ex: `counter_cache: :children_count`).
+* :touch => If `true`, when you updated or destroy a node, it's ancestors will be touched: `updated_at` column is updated with the current time. (the default value is `false`)
+* :dependent => Controls what happens with the children of a deleted node. Choose one of the following options (the default value is :destroy)
+  * :destroy children are also destroyed.
+  * :delete_all delete children direct in the database (this will skip callbacks)
+  * :nullify set the children's parent_id to NULL (nil), therefore turning them into new roots (this will also skip callbacks)
+  * :restrict_with_exception an exception is raised if there is an attempt to destroy a record with children
+  * :restrict_with_error a validation error is added to the record if there is an attempt to destroy it and it has children
 
 ### Class methods
 
