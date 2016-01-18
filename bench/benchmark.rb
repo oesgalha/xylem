@@ -1,12 +1,18 @@
 require 'bundler/inline'
 
+BENCH_GEM = ENV['BENCH_GEM']
+
+unless ['xylem', 'acts_as_tree', 'awesome_nested_set', 'ancestry'].include?(BENCH_GEM)
+  fail 'Please provide a environment variable BENCH_GEM with one o the following values: [xylem, acts_as_tree, awesome_nested_set, ancestry]'
+end
+
 gemfile(true) do
   source 'https://rubygems.org'
   gem 'activerecord', require: 'active_record'
   gem 'pg'
   gem 'benchmark-ips'
 
-  case ENV['BENCH_GEM']
+  case BENCH_GEM
   when 'xylem'
     gem 'xylem', path: '..'
   when 'acts_as_tree'
@@ -16,50 +22,25 @@ gemfile(true) do
     gem 'awesome_nested_set'
   when 'ancestry'
     gem 'ancestry'
-  else
-    fail 'Please provide a environment variable BENCH_GEM with one o the following values: [xylem, acts_as_tree, awesome_nested_set, ancestry]'
   end
 end
 
 ActiveRecord::Base.establish_connection(adapter: 'postgresql', database: 'xylem_test', username: 'postgres')
 ActiveRecord::Base.connection.execute('DROP SCHEMA public CASCADE; CREATE SCHEMA public;')
 
-case ENV['BENCH_GEM']
-when 'xylem'
-  class Comment < ActiveRecord::Base
-    act_as_tree
-    connection.create_table table_name, force: true do |t|
-      t.string :payload
-      t.integer :parent_id, index: true
-    end
-  end
-when 'acts_as_tree'
-  ActiveRecord::Base.send(:include, ActsAsTree)
+ActiveRecord::Base.send(:include, ActsAsTree) if BENCH_GEM == 'acts_as_tree'
 
-  class Comment < ActiveRecord::Base
-    acts_as_tree
-    connection.create_table table_name, force: true do |t|
-      t.string :payload
-      t.integer :parent_id, index: true
-    end
-  end
-when 'awesome_nested_set'
-  class Comment < ActiveRecord::Base
-    acts_as_nested_set
-    connection.create_table table_name, force: true do |t|
-      t.string :payload
-      t.integer :parent_id, index: true
-      t.integer :lft, index: true
-      t.integer :rgt, index: true
-    end
-  end
-when 'ancestry'
-  class Comment < ActiveRecord::Base
-    has_ancestry
-    connection.create_table table_name, force: true do |t|
-      t.string :payload
-      t.string :ancestry, index: true
-    end
+class Comment < ActiveRecord::Base
+  acts_as_tree        if ['xylem', 'acts_as_tree'].include?(BENCH_GEM)
+  acts_as_nested_set  if BENCH_GEM == 'awesome_nested_set'
+  has_ancestry        if BENCH_GEM == 'ancestry'
+
+  connection.create_table table_name, force: true do |t|
+    t.string :payload
+    t.integer :parent_id, index: true   if BENCH_GEM != 'ancestry'
+    t.integer :lft, index: true         if BENCH_GEM == 'awesome_nested_set'
+    t.integer :rgt, index: true         if BENCH_GEM == 'awesome_nested_set'
+    t.string :ancestry, index: true     if BENCH_GEM == 'ancestry'
   end
 end
 
