@@ -19,7 +19,7 @@ Also queries that traverse the tree (such as get ancestors or descendants of a n
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'xylem', github: 'oesgalha/xylem'
+gem 'xylem', '~> 0.0.1'
 ```
 
 And then execute:
