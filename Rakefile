@@ -5,4 +5,10 @@ task :test do
   require './test/xylem_tests.rb'
 end
 
+task :bench do
+  ['acts_as_tree', 'ancestry', 'awesome_nested_set', 'xylem'].each do |benched_gem|
+    sh "cd bench/ && BENCH_GEM=#{benched_gem} ruby benchmark.rb"
+  end
+end
+
 task default: :test
