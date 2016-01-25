@@ -6,6 +6,9 @@ function install {
 }
 
 echo updating package information
+export DEBIAN_FRONTEND=noninteractive
+curl -sSL "https://ftp-master.debian.org/keys/archive-key-7.0.asc" | sudo -E apt-key add -
+echo "deb http://ftp.us.debian.org/debian unstable main contrib non-free" | sudo tee -a /etc/apt/sources.list > /dev/null
 apt-add-repository -y ppa:brightbox/ruby-ng >/dev/null 2>&1
 apt-get -y update >/dev/null 2>&1
 
