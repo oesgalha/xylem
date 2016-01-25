@@ -48,8 +48,8 @@ Some notes regarding migration:
 * Add a foreign key is optional, but it's recommended to guarantee data consistency
 * The `foreign_key: true` option is available in [rails 4.2.1](https://github.com/rails/rails/blob/v4.2.1/activerecord/CHANGELOG.md) or newer
 
-Now you need to enable the tree behavior in or model by adding the `acts_as_tree` directive in it.
-Let's suppose again that you're dealing with a model called `Menu`, you should add the following:
+Now you need to enable the tree behavior in our model by adding the `acts_as_tree` directive in it.
+Let's continue supposing that you're dealing with a model called `Menu`, you should add the following:
 
 ```ruby
 class Menu < ActiveRecord::Base
@@ -88,8 +88,8 @@ Xylem adds the following class methods to a class with the `acts_as_tree` direct
 * `self_and_ancestors` returns the ancestors from the root to the node itself. Ordered from the root to the node.
 * `descendants` returns all the descendants of the given node. Ordered by depth from the closer to the node to the more distant ones.
 * `self_and_descendants` returns the node and all it's descendants. Ordered by depth with the node first and the descendants later.
-* `root` returns the current node root.
-* `siblings` returns the siblings from the node, excluding itself.
+* `root` returns the current node's root.
+* `siblings` returns the node's siblings, excluding itself.
 * `self_and_siblings` returns the node and it's siblings.
 * `children` returns the direct children of the node.
 * `self_and_children` returns the node and it's direct children.
