@@ -9,7 +9,7 @@ end
 gemfile(true) do
   source 'https://rubygems.org'
   gem 'activerecord', require: 'active_record'
-  gem 'pg'
+  gem 'sqlite3'
   gem 'benchmark-ips'
 
   case BENCH_GEM
@@ -25,8 +25,7 @@ gemfile(true) do
   end
 end
 
-ActiveRecord::Base.establish_connection(adapter: 'postgresql', database: 'xylem_test', username: 'postgres')
-ActiveRecord::Base.connection.execute('DROP SCHEMA public CASCADE; CREATE SCHEMA public;')
+ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
 
 ActiveRecord::Base.send(:include, ActsAsTree) if BENCH_GEM == 'acts_as_tree'
 
@@ -81,5 +80,5 @@ Benchmark.ips do |x|
   x.report('descendants') do |times|
     times.times { @comment1.reload.descendants.to_a }
   end
-  x.json!("#{ENV['BENCH_GEM']}.json")
+  x.json!("#{BENCH_GEM}.json")
 end
