@@ -42,6 +42,10 @@ module Xylem
       children.size == 0
     end
 
+    def leaves
+      descendants.leaves
+    end
+
     private
 
     def _xylem_query(where_col, where_val, join_lft_col, join_rgt_col, order_stmt)

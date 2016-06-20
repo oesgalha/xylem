@@ -223,4 +223,12 @@ class InstanceMethodsTest < XylemTestCase
     refute @training.leaf?
     refute @option1.leaf?
   end
+
+  def test_leaves
+    assert_equal [@suboption11, @suboption12], @option1.leaves
+    assert_equal [@option3, @suboption11, @suboption12], @main.leaves
+    assert_equal [@physical, @digital], @product.leaves
+    assert_equal [@daily_training, @weekly_training], @training.leaves
+    assert_equal [@consultancy, @hosting, @daily_training, @weekly_training], @service.leaves
+  end
 end
