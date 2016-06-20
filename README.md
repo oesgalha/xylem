@@ -96,6 +96,7 @@ Xylem adds the following class methods to a class with the `acts_as_tree` direct
 * `parent` returns the node parent.
 * `root?` returns true if the current node is a root, false otherwise.
 * `leaf?` returns true if the current node is a leaf, false otherwise.
+* `leaves`: returns the leaves from the current node
 
 ### Examples
 
@@ -121,6 +122,8 @@ child1.root                 # => root
 child1.self_and_ancestors   # => [ root, child1 ]
 
 child1.self_and_siblings    # => [ child1, child2 ]
+
+child2.leaves               # => [ subchild ]
 ```
 
 ## Dependencies
