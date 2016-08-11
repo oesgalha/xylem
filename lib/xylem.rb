@@ -68,8 +68,7 @@ module Xylem
     end
 
     def leaves
-      t = arel_table
-      where(t[:id].not_in(t.project([t[:parent_id]]).where(t[:parent_id].not_eq(nil)).distinct))
+      where.not(id: select(:parent_id).where.not(parent_id: nil).distinct)
     end
   end
 end

@@ -57,6 +57,7 @@ class XylemTestCase < MiniTest::Test
     @suboption11 = Menu.create!(parent: @option1)
     @suboption12 = Menu.create!(parent: @option1)
     @suboption21 = Menu.create!(parent: @option2, draft: true)
+    @suboption31 = Menu.create!(parent: @option3, draft: true )
   end
 
   def teardown
