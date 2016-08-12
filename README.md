@@ -19,7 +19,7 @@ Also queries that traverse the tree (such as get ancestors or descendants of a n
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'xylem', '~> 0.0.1'
+gem 'xylem', '~> 0.1.1'
 ```
 
 And then execute:
@@ -155,6 +155,20 @@ Here are some other gems you could use to achieve the same objective:
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+## Changelog
+
+### 0.1.1 - 2016-08-12
+
+  * Fixed leaves query to respect the AR's default_scope
+
+### 0.1.0 - 2016-06-20
+
+  * Added the #leaves instance method
+
+### 0.0.1 - 2016-01-18
+
+  * Initial version
 
 ## License
 
