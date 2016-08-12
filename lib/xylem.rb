@@ -68,7 +68,7 @@ module Xylem
     end
 
     def leaves
-      where.not(id: select(:parent_id).where.not(parent_id: nil).distinct)
+      where.not(id: select(:parent_id).where.not(parent_id: nil))
     end
   end
 end
